@@ -1,4 +1,4 @@
-namespace Users
+namespace Models
 {
     internal class User
     {
