@@ -1,6 +1,6 @@
 namespace Models
 {
-    internal class User
+    public class User
     {
         private bool isManager = false;
 
@@ -28,17 +28,4 @@ namespace Models
             Password = pass;
         }
     }
-
-    internal class UserList
-    {
-        private Dictionary<string, User> employees = new Dictionary<string, User>();
-
-        public UserList()
-        {
-            employees.Add("admin", new User("admin", "pass"));
-            employees.Add("jallen", new User("jallen", "1234"));
-            employees.Add("test", new User("test", "test"));
-        }
-    }
-
 }
