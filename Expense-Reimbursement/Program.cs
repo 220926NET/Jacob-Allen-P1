@@ -1,4 +1,5 @@
 ﻿using Services;
+using Models;
 
 PrintMainMenu();
 GetMainMenuChoice();
@@ -35,6 +36,11 @@ static void GetMainMenuChoice()
     {
         Console.WriteLine("Register User");
     }
+    else if (input == "3")
+    {
+        Console.WriteLine("Printing Users info");
+        PrintUsersInfo();
+    }
     else if (input == "q")
     {
         Console.WriteLine("Goodbye!");
@@ -44,5 +50,15 @@ static void GetMainMenuChoice()
         PrintMainMenu();
         Console.WriteLine("Please choose a valid input.");
         GetMainMenuChoice();
+    }
+
+    void PrintUsersInfo()
+    {
+        List<User> users = SystemController.GetAllUsers();
+
+        foreach (User user in users)
+        {
+            Console.WriteLine(user.ToString());
+        }
     }
 }

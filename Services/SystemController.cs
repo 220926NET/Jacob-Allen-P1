@@ -3,7 +3,7 @@ using DataAccess;
 
 namespace Services;
 
-static class SystemController
+public static class SystemController
 {
     public static void AddNewUser(User newUser)
     {
@@ -13,5 +13,10 @@ static class SystemController
     public static bool UserExists(string username)
     {
         return new StaticStorage().UserExists(username);
+    }
+
+    public static List<User> GetAllUsers()
+    {
+        return new DBRepo().GetAllUsers();
     }
 }

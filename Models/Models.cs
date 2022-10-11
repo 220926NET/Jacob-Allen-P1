@@ -2,7 +2,7 @@ namespace Models
 {
     public class User
     {
-        private bool isManager = false;
+        public bool isManager = false;
 
         public string Username {
             get => _username;
@@ -26,6 +26,11 @@ namespace Models
         {
             Username = name;
             Password = pass;
+        }
+
+        public override string ToString()
+        {
+            return $"Username: {Username} | Password: {Password} | isManager: {isManager.ToString()}";
         }
     }
 }
