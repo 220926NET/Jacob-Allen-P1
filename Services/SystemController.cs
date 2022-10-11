@@ -7,7 +7,7 @@ public static class SystemController
 {
     public static void AddNewUser(User newUser)
     {
-        new StaticStorage().AddUser(newUser);
+        new DBRepo().AddUser(newUser);
     }
 
     public static bool UserExists(string username)

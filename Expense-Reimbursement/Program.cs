@@ -35,6 +35,7 @@ static void GetMainMenuChoice()
     else if (input == "2")
     {
         Console.WriteLine("Register User");
+        RegisterUser();
     }
     else if (input == "3")
     {
@@ -60,5 +61,87 @@ static void GetMainMenuChoice()
         {
             Console.WriteLine(user.ToString());
         }
+    }
+
+    void RegisterUser()
+    {
+        List<User> users = SystemController.GetAllUsers();
+        bool validInput = false;
+
+        Console.WriteLine("Please enter a username that is 4-30 characters long.");
+
+        string? username = "";
+
+        while (!validInput)
+        {
+            Console.Write("Username: ");
+            username = Console.ReadLine();
+
+            username = username?.Trim();
+
+            if (username == null) 
+            {
+                Console.WriteLine("Please enter valid input.");
+                continue;
+            }
+            else if (username.Length > 30)
+            {
+                Console.WriteLine("Username is too long. Please enter a username that is 4-30 characters long.");
+                continue;
+            }
+            else if (username.Length < 4)
+            {
+                Console.WriteLine("Username is too short. Please enter a username that is 4-30 characters long.");
+                continue;
+            }
+
+            foreach (User user in users)
+            {
+                if (username == user.Username)
+                {
+                    Console.WriteLine("Username already exists, please enter a new one.");
+                    validInput = false;
+                    break;
+                }
+
+                validInput = true;
+            }
+        }
+        
+        Console.WriteLine("Please enter a password that is 4-30 characters long.");
+
+        validInput = false;
+        string? password = "";
+
+        while (!validInput)
+        {
+            Console.Write("Password: ");
+            password = Console.ReadLine();
+
+            password = password?.Trim();
+
+            if (password == null) 
+            {
+                Console.WriteLine("Please enter valid input.");
+                continue;
+            }
+            else if (password.Length > 30)
+            {
+                Console.WriteLine("Password is too long. Please enter a username that is 4-30 characters long.");
+                continue;
+            }
+            else if (password.Length < 4)
+            {
+                Console.WriteLine("Password is too short. Please enter a username that is 4-30 characters long.");
+                continue;
+            }
+
+            validInput = true;
+        }
+
+        User newUser = new User(username, password);
+
+        SystemController.AddNewUser(newUser);
+
     }
 }

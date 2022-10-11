@@ -22,10 +22,10 @@ namespace Models
             Password = "z";
         }
         
-        public User(string name, string pass)
+        public User(string? name, string? pass)
         {
-            Username = name;
-            Password = pass;
+            Username = name ?? "error";
+            Password = pass ?? "error";
         }
 
         public override string ToString()
