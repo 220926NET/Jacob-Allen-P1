@@ -1,8 +1,13 @@
 ﻿using Services;
 using Models;
 
-PrintMainMenu("");
-GetMainMenuChoice();
+string message = "";
+
+while (true)
+{
+    PrintMainMenu(message);
+    message = GetMainMenuChoice();
+}
 
 static void PrintMainMenu(string message)
 {
@@ -19,38 +24,41 @@ static void PrintMainMenu(string message)
 
 }
 
-void GetMainMenuChoice()
+string GetMainMenuChoice()
 {
     string? input = Console.ReadLine();
 
     if (input == null)
     {
-        PrintMainMenu("Please choose a valid input.");
-        GetMainMenuChoice();
+        return "Please choose a valid input.";
     }
     else if (input == "1")
     {
         Console.WriteLine("Login Screen");
         Login();
+        return "";
     }
     else if (input == "2")
     {
         Console.WriteLine("Register User");
         RegisterUser();
+        return "";
     }
     else if (input == "3")
     {
         Console.WriteLine("Printing Users info");
         PrintUsersInfo();
+        return "";
     }
     else if (input == "q")
     {
         Console.WriteLine("Goodbye!");
+        Environment.Exit(0);
+        return "";
     }
     else
     {
-        PrintMainMenu("Please choose a valid input.");
-        GetMainMenuChoice();
+        return "Please choose a valid input.";
     }
 }
 
@@ -62,6 +70,7 @@ void PrintUsersInfo()
     {
         Console.WriteLine(user.ToString());
     }
+    Console.ReadLine();
 }
 
 void RegisterUser()
@@ -164,13 +173,15 @@ void Login()
         if (user.Username == username && user.Password == password)
         {
             Console.WriteLine($"Welcome {user.Username}!");
+            Console.ReadLine();
             loginSuccessful = true;
         }
     }
 
     if (!loginSuccessful)
     {
-        PrintMainMenu("Invalid username or password");
+        Console.WriteLine("Invalid username or password");
+        Console.ReadLine();
     }
 
 }
