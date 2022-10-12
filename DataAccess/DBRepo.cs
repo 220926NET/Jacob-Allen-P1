@@ -76,7 +76,7 @@ public class DBRepo
                     User currentUser = new User() {
                         Username = un,
                         Password = pw,
-                        isManager = manager
+                        IsManager = manager
                     };
 
                     users.Add(currentUser);

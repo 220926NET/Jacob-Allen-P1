@@ -2,7 +2,7 @@ namespace Models
 {
     public class User
     {
-        public bool isManager = false;
+        public bool IsManager { get; set; } = false;
 
         public string Username {
             get => _username;
@@ -30,7 +30,7 @@ namespace Models
 
         public override string ToString()
         {
-            return $"Username: {Username} | Password: {Password} | isManager: {isManager.ToString()}";
+            return $"Username: {Username} | Password: {Password} | isManager: {IsManager.ToString()}";
         }
     }
 }
