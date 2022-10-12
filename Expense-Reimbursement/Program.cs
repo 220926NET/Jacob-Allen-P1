@@ -35,7 +35,13 @@ string GetMainMenuChoice()
     else if (input == "1")
     {
         Console.WriteLine("Login Screen");
-        Login();
+        User loginUser;
+        bool loginSuccessful = false;
+        loginSuccessful = Login(out loginUser);
+
+        if (loginSuccessful) UserMenu(loginUser);
+        else return "Login Failed";
+
         return "";
     }
     else if (input == "2")
@@ -155,7 +161,7 @@ void RegisterUser()
 
 }
 
-void Login()
+bool Login(out User loginUser)
 {
     string? username = "";
     string? password = "";
@@ -165,6 +171,7 @@ void Login()
     username = Console.ReadLine();
     Console.Write("Password: ");
     password = Console.ReadLine();
+    loginUser = new User();
 
     List<User> users = SystemController.GetAllUsers();
 
@@ -175,6 +182,7 @@ void Login()
             Console.WriteLine($"Welcome {user.Username}!");
             Console.ReadLine();
             loginSuccessful = true;
+            loginUser = user;
         }
     }
 
@@ -183,5 +191,34 @@ void Login()
         Console.WriteLine("Invalid username or password");
         Console.ReadLine();
     }
+
+    return loginSuccessful;
+
+}
+
+void UserMenu(User user)
+{
+    if (user.IsManager)
+    {
+        ManagerMenu(user);
+    }
+    else
+    {
+        EmployeeMenu(user);
+    }
+}
+
+void ManagerMenu(User user)
+{
+
+}
+
+void EmployeeMenu(User user)
+{
+    Console.WriteLine($"Welcome Employee {user.Username}");
+    Console.WriteLine("Please choose an option below:");
+    Console.WriteLine("[1] Add new expense report");
+    Console.WriteLine("[2] View previous expense reports");
+    Console.WriteLine("[q] Logout");
 
 }
