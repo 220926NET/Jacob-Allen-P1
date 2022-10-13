@@ -9,6 +9,5 @@ public class Ticket
     public string CurrentStatus { get; set; } = Status.Pending.ToString();
     string Description { get; set; } = "";
     decimal Amount { get; set; }
-
-
+    DateOnly DateSubmitted { get; set; }
 }
