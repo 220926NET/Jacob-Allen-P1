@@ -24,4 +24,9 @@ public static class SystemController
     {
         new TicketDB(new SqlConnectionFactory()).AddTicket(user, ref ticket);
     }
+
+    public static bool GetUserTickets(User user, ref List<Ticket> userTickets)
+    {
+        return new TicketDB(new SqlConnectionFactory()).GetUserTickets(user, ref userTickets);
+    }
 }

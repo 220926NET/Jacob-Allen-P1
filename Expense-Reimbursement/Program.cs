@@ -279,6 +279,18 @@ void EmployeeMenu(User user)
                 break;
             case "2":
                 Console.WriteLine("View previous reports");
+                List<Ticket> userTickets = new List<Ticket>();
+                bool success = GetUserTickets(user, ref userTickets);
+
+                if (success)
+                {
+                    foreach (Ticket ticket in userTickets)
+                    {
+                        Console.WriteLine(ticket.ToString());
+                    }
+                }
+                else Console.WriteLine("You have no tickets.");
+                
                 Console.ReadLine();
                 isValid = true;
                 break;
@@ -314,7 +326,13 @@ void AddTicket(User user)
 
     if (description != null)
     {
-        ticket = new Ticket(user.UserId, description, amount);
+        ticket = new Ticket(user.Id, description, amount);
         SystemController.AddTicket(user, ref ticket);
+        Console.WriteLine(ticket.ToString());
     }
+}
+
+bool GetUserTickets(User user, ref List<Ticket> userTickets)
+{
+    return SystemController.GetUserTickets(user, ref userTickets);
 }

@@ -60,7 +60,7 @@ public class UserDB
                     bool manager = (bool) reader ["IsManager"];
 
                     User currentUser = new User() {
-                        UserId = id,
+                        Id = id,
                         Username = un,
                         Password = pw,
                         IsManager = manager

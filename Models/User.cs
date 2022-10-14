@@ -2,7 +2,7 @@ namespace Models;
 
 public class User
 {
-    public int UserId { get; set; }
+    public int Id { get; set; }
     public bool IsManager { get; set; } = false;
 
     public string Username
@@ -33,6 +33,6 @@ public class User
 
     public override string ToString()
     {
-        return $"UserId: {UserId} | Username: {Username} | Password: {Password} | isManager: {IsManager.ToString()}";
+        return $"UserId: {Id} | Username: {Username} | Password: {Password} | isManager: {IsManager.ToString()}";
     }
 }

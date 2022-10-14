@@ -23,15 +23,28 @@ public class TicketDB
 
             //SqlCommand command = new SqlCommand($"INSERT INTO Tickets (UserId, Description, Amount) VALUES ({newUser.Username}, {newUser.Password})", connection);
 
-            using SqlCommand command = new SqlCommand($"INSERT INTO Tickets ([UserId], [Description], [Amount], [Status]) OUTPUT INSERTED.Id VALUES (@userid, @description, @amount, @status);", connection);
-            command.Parameters.AddWithValue("@userid", user.UserId);
-            command.Parameters.AddWithValue("@description", ticket.Description);
-            command.Parameters.AddWithValue("@amount", ticket.Amount);
-            command.Parameters.AddWithValue("@status", ticket.CurrentStatus.ToString());
+            using SqlCommand insertCommand = new SqlCommand($"INSERT INTO Tickets ([UserId], [Description], [Amount], [Status]) OUTPUT INSERTED.Id VALUES (@userid, @description, @amount, @status);", connection);
+            insertCommand.Parameters.AddWithValue("@userid", ticket.UserId);
+            insertCommand.Parameters.AddWithValue("@description", ticket.Description);
+            insertCommand.Parameters.AddWithValue("@amount", ticket.Amount);
+            insertCommand.Parameters.AddWithValue("@status", ticket.CurrentStatus.ToString());
 
-            int ticketId = (int) command.ExecuteScalar();
+            int id = (int) insertCommand.ExecuteScalar();
 
-            ticket.Id = ticketId;
+            using SqlCommand selectCommand = new SqlCommand($"SELECT * FROM Tickets WHERE Id = @id", connection);
+            selectCommand.Parameters.AddWithValue("@id", id);
+
+            SqlDataReader reader = selectCommand.ExecuteReader();
+
+            if(reader.HasRows)
+            {
+                reader.Read();
+
+                ticket.Id = (int) reader["Id"];
+                // Console.WriteLine(reader["DateSubmitted"].GetType());
+                ticket.DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]);
+            }
+            
         }
         catch (InvalidCastException)
         {
@@ -87,5 +100,47 @@ public class TicketDB
 
         return users;
 
+    }
+
+    public bool GetUserTickets(User user, ref List<Ticket> userTickets)
+    {
+        try
+        {
+            using SqlConnection connection = _factory.GetConnection();
+            connection.Open();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Tickets WHERE UserId = @userid;", connection);
+            command.Parameters.AddWithValue("@userid", user.Id);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if(reader.HasRows)
+            {
+                while(reader.Read())
+                {
+                    Ticket ticket = new Ticket() {
+                        Id = (int) reader["Id"],
+                        UserId = (int) reader["UserId"],
+                        Description = (string) reader["Description"],
+                        Amount = (decimal) reader["Amount"],
+                        DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]),
+                        CurrentStatus = (string) reader["Status"]
+                    };
+
+                    userTickets.Add(ticket);
+                }
+            }
+        }
+        catch(SqlException)
+        {
+            Console.WriteLine("Something went wrong connecting to the DB...");
+        }
+
+        if (userTickets.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
