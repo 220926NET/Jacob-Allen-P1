@@ -7,7 +7,14 @@ public class Ticket
     public int Id { get; set; }
     public int UserId { get; set; }
     public string CurrentStatus { get; set; } = Status.Pending.ToString();
-    string Description { get; set; } = "";
-    decimal Amount { get; set; }
-    DateOnly DateSubmitted { get; set; }
+    public string Description { get; set; } = "";
+    public decimal Amount { get; set; }
+    public DateOnly DateSubmitted { get; set; }
+
+    public Ticket (int userid, string description, decimal amount)
+    {
+        UserId = userid;
+        Description = description;
+        Amount = amount;
+    }
 }

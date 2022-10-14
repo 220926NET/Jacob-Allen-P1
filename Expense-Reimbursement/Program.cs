@@ -157,7 +157,7 @@ void RegisterUser()
 
     User newUser = new User(username, password);
 
-    SystemController.AddNewUser(newUser);
+    SystemController.AddUser(newUser);
 
 }
 
@@ -210,7 +210,45 @@ void UserMenu(User user)
 
 void ManagerMenu(User user)
 {
+Console.WriteLine($"Welcome Manager {user.Username}");
+    Console.WriteLine("Please choose an option below:");
+    Console.WriteLine("[1] Add new expense report");
+    Console.WriteLine("[2] View previous expense reports");
+    Console.WriteLine("[q] Logout");
 
+    
+    bool isValid = false;
+
+    while(!isValid)
+    {
+        string? input = Console.ReadLine();
+        switch (input)
+        {
+            case null:
+                Console.WriteLine("Please enter a valid input.");
+                isValid = false;
+                break;
+            case "1":
+                Console.WriteLine("Add new expense report");
+                Console.ReadLine();
+                isValid = true;
+                break;
+            case "2":
+                Console.WriteLine("View previous reports");
+                Console.ReadLine();
+                isValid = true;
+                break;
+            case "q":
+                Console.WriteLine("Logging Out");
+                Console.ReadLine();
+                isValid = true;
+                break;
+            default:
+                Console.WriteLine("Please enter a valid input.");
+                isValid = false;
+                break;
+        }
+    }
 }
 
 void EmployeeMenu(User user)
@@ -221,4 +259,62 @@ void EmployeeMenu(User user)
     Console.WriteLine("[2] View previous expense reports");
     Console.WriteLine("[q] Logout");
 
+    
+    bool isValid = false;
+
+    while(!isValid)
+    {
+        string? input = Console.ReadLine();
+        switch (input)
+        {
+            case null:
+                Console.WriteLine("Please enter a valid input.");
+                isValid = false;
+                break;
+            case "1":
+                Console.WriteLine("Add new expense report");
+                AddTicket(user);
+                Console.ReadLine();
+                isValid = true;
+                break;
+            case "2":
+                Console.WriteLine("View previous reports");
+                Console.ReadLine();
+                isValid = true;
+                break;
+            case "q":
+                Console.WriteLine("Logging Out");
+                Console.ReadLine();
+                isValid = true;
+                break;
+            default:
+                Console.WriteLine("Please enter a valid input.");
+                isValid = false;
+                break;
+        }
+    }
+}
+
+void AddTicket(User user)
+{
+    string? description;
+    decimal amount = 0.0m;
+    bool validInput = false;
+    Ticket ticket;
+
+    Console.WriteLine("Enter Description");
+    description = Console.ReadLine();
+
+    while(!validInput && amount <= 0.0m)
+    {
+        Console.WriteLine("Enter Amount");
+        validInput = Decimal.TryParse(Console.ReadLine(), out amount);
+    }
+
+
+    if (description != null)
+    {
+        ticket = new Ticket(user.UserId, description, amount);
+        SystemController.AddTicket(user, ref ticket);
+    }
 }

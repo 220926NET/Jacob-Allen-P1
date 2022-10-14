@@ -23,6 +23,7 @@ CREATE TABLE Tickets (
 );
 
 INSERT INTO Tickets VALUES (2, 'Pizza Party', 60.00, GETDATE(), 'Pending');
+INSERT INTO Tickets (UserId, [Description], Amount, [Status]) OUTPUT INSERTED.Id VALUES (2, 'Hotel', 130.00, 'Pending');
 
 SELECT * FROM Tickets;
 

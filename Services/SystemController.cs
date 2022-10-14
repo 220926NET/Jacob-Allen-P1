@@ -5,7 +5,7 @@ namespace Services;
 
 public static class SystemController
 {
-    public static void AddNewUser(User newUser)
+    public static void AddUser(User newUser)
     {
         new UserDB(new SqlConnectionFactory()).AddUser(newUser);
     }
@@ -18,5 +18,10 @@ public static class SystemController
     public static List<User> GetAllUsers()
     {
         return new UserDB(new SqlConnectionFactory()).GetAllUsers();
+    }
+
+    public static void AddTicket(User user, ref Ticket ticket)
+    {
+        new TicketDB(new SqlConnectionFactory()).AddTicket(user, ref ticket);
     }
 }

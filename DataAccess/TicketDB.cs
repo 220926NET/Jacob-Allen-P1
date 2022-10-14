@@ -5,29 +5,37 @@ namespace DataAccess;
 
 // ADO.NET : Collection of classes and tools to interact with a variety of data sources in uniform fashion
 
-public class UserDB
+public class TicketDB
 {
     private SqlConnectionFactory _factory;
 
-    public UserDB(SqlConnectionFactory factory)
+    public TicketDB(SqlConnectionFactory factory)
     {
         _factory = factory;
     }
 
-    public void AddUser(User newUser)
+    public void AddTicket(User user, ref Ticket ticket)
     {
         try
         {
             using SqlConnection connection = _factory.GetConnection();
             connection.Open();
 
-            //SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES ({newUser.Username}, {newUser.Password})", connection);
+            //SqlCommand command = new SqlCommand($"INSERT INTO Tickets (UserId, Description, Amount) VALUES ({newUser.Username}, {newUser.Password})", connection);
 
-            using SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES (@username, @password)", connection);
-            command.Parameters.AddWithValue("@username", newUser.Username);
-            command.Parameters.AddWithValue("@password", newUser.Password);
+            using SqlCommand command = new SqlCommand($"INSERT INTO Tickets ([UserId], [Description], [Amount], [Status]) OUTPUT INSERTED.Id VALUES (@userid, @description, @amount, @status);", connection);
+            command.Parameters.AddWithValue("@userid", user.UserId);
+            command.Parameters.AddWithValue("@description", ticket.Description);
+            command.Parameters.AddWithValue("@amount", ticket.Amount);
+            command.Parameters.AddWithValue("@status", ticket.CurrentStatus.ToString());
 
-            command.ExecuteNonQuery();
+            int ticketId = (int) command.ExecuteScalar();
+
+            ticket.Id = ticketId;
+        }
+        catch (InvalidCastException)
+        {
+            Console.WriteLine("Invalid cast");
         }
         catch (SqlException)
         {
@@ -60,7 +68,6 @@ public class UserDB
                     bool manager = (bool) reader ["IsManager"];
 
                     User currentUser = new User() {
-                        UserId = id,
                         Username = un,
                         Password = pw,
                         IsManager = manager
