@@ -14,6 +14,40 @@ public class TicketDB
         _factory = factory;
     }
 
+    public bool GetTicket(int id, ref Ticket ticket)
+    {
+        try
+        {
+            using SqlConnection connection = _factory.GetConnection();
+            connection.Open();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Tickets WHERE Id = @id", connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if(reader.HasRows)
+            {
+                reader.Read();
+                ticket.Id = (int)reader["Id"];
+                ticket.UserId = (int)reader["UserId"];
+                ticket.Description = (string)reader["Description"];
+                ticket.Amount = (decimal)reader["Amount"];
+                ticket.DateSubmitted = DateOnly.FromDateTime((DateTime)reader["DateSubmitted"]);
+                ticket.CurrentStatus = (string)reader["Status"];
+
+
+                return true;
+
+            }
+        }
+        catch(SqlException)
+        {
+            Console.WriteLine("Something went wrong connecting to the DB...");
+        }
+
+        return false;
+    }
     public void AddTicket(User user, ref Ticket ticket)
     {
         try
@@ -56,51 +90,47 @@ public class TicketDB
         }
     }
 
-    public List<User> GetAllUsers()
+        public bool GetAllTickets(ref List<Ticket> tickets)
     {
-
-        List<User> users = new List<User>();
-        
-        try 
+        try
         {
-
             using SqlConnection connection = _factory.GetConnection();
             connection.Open();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM Users;", connection);
+            SqlCommand command = new SqlCommand("SELECT * FROM Tickets", connection);
 
             SqlDataReader reader = command.ExecuteReader();
 
-            if (reader.HasRows)
+            if(reader.HasRows)
             {
-                while (reader.Read())
+                while(reader.Read())
                 {
-                    int id = (int) reader["Id"];
-                    string un = (string) reader["UserName"];
-                    string pw = (string) reader["Password"];
-                    bool manager = (bool) reader ["IsManager"];
-
-                    User currentUser = new User() {
-                        Username = un,
-                        Password = pw,
-                        IsManager = manager
+                    Ticket ticket = new Ticket() {
+                        Id = (int) reader["Id"],
+                        UserId = (int) reader["UserId"],
+                        Description = (string) reader["Description"],
+                        Amount = (decimal) reader["Amount"],
+                        DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]),
+                        CurrentStatus = (string) reader["Status"]
                     };
 
-                    users.Add(currentUser);
-
+                    tickets.Add(ticket);
                 }
             }
-
-
         }
-        catch (SqlException)
+        catch(SqlException)
         {
             Console.WriteLine("Something went wrong connecting to the DB...");
         }
 
-        return users;
+        if (tickets.Count > 0)
+        {
+            return true;
+        }
 
+        return false;
     }
+
 
     public bool GetUserTickets(User user, ref List<Ticket> userTickets)
     {
@@ -142,5 +172,24 @@ public class TicketDB
         }
 
         return false;
+    }
+
+    public void UpdateTicket(Ticket ticket)
+    {
+        try
+        {
+            using SqlConnection connection = _factory.GetConnection();
+            connection.Open();
+
+            SqlCommand command = new SqlCommand("UPDATE Tickets SET Status = @status WHERE Id = @id", connection);
+            command.Parameters.AddWithValue("@status", ticket.CurrentStatus.ToString());
+            command.Parameters.AddWithValue("@id", ticket.Id);
+
+            command.ExecuteNonQuery();
+        }
+        catch(SqlException)
+        {
+            Console.WriteLine("Something went wrong connecting to the DB...");
+        }
     }
 }

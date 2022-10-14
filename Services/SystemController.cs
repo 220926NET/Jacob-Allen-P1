@@ -25,8 +25,23 @@ public static class SystemController
         new TicketDB(new SqlConnectionFactory()).AddTicket(user, ref ticket);
     }
 
+    public static bool GetAllTickets(ref List<Ticket> tickets)
+    {
+        return new TicketDB(new SqlConnectionFactory()).GetAllTickets(ref tickets);
+    } 
     public static bool GetUserTickets(User user, ref List<Ticket> userTickets)
     {
         return new TicketDB(new SqlConnectionFactory()).GetUserTickets(user, ref userTickets);
     }
+
+    public static void UpdateTicket(Ticket ticket)
+    {
+        new TicketDB(new SqlConnectionFactory()).UpdateTicket(ticket);
+    }
+
+    public static bool GetTicket(int id, ref Ticket ticket)
+    {
+        return new TicketDB(new SqlConnectionFactory()).GetTicket(id, ref ticket);
+    }
+
 }
