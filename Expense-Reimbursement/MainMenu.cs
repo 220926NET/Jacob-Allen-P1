@@ -110,6 +110,7 @@ public static class MainMenu
             new EmployeeMenu(user);
         }
     }
+    
     static void PrintUsersInfo()
     {
         List<User> users = SystemController.GetAllUsers();
@@ -120,6 +121,7 @@ public static class MainMenu
         }
         Console.ReadLine();
     }
+
     static void RegisterUser()
     {
         List<User> users = SystemController.GetAllUsers();

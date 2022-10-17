@@ -23,10 +23,14 @@ CREATE TABLE Tickets (
 );
 
 INSERT INTO Tickets VALUES (2, 'Pizza Party', 60.00, GETDATE(), 'Pending');
-INSERT INTO Tickets (UserId, [Description], Amount, [Status]) OUTPUT INSERTED.Id VALUES (2, 'Hotel', 130.00, 'Pending');
+INSERT INTO Tickets (UserId, [Description], Amount, [Status]) OUTPUT INSERTED.Id, INSERTED.DateSubmitted VALUES (2, 'Hotel', 130.00, 'Pending');
 
 SELECT * FROM Tickets;
 
 SELECT Tickets.Id, Users.UserName, Tickets.Amount FROM Tickets JOIN Users ON Tickets.UserId = Users.Id;
 
-DROP TABLE Tickets;
+-- DROP TABLE Tickets;
+
+INSERT INTO Tickets ([UserId], [Description], [Amount], [Status]) OUTPUT INSERTED.Id VALUES (@userid, @description, @amount, @status);
+
+UPDATE Tickets SET Status = 'Approved' WHERE Id = 100;
