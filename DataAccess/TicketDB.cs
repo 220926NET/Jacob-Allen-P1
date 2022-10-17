@@ -90,7 +90,7 @@ public class TicketDB
         }
     }
 
-        public bool GetAllTickets(ref List<Ticket> tickets)
+    public bool GetAllTickets(ref List<Ticket> tickets)
     {
         try
         {

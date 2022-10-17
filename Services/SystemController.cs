@@ -20,6 +20,42 @@ public static class SystemController
         return new UserDB(new SqlConnectionFactory()).GetAllUsers();
     }
 
+    public static bool LoginCheck(string? username, string? password, ref User loginUser)
+    {
+        List<User> users = SystemController.GetAllUsers();
+        bool loginSuccessful = false;
+
+        foreach (User user in users)
+        {
+            if (user.Username == username && user.Password == password)
+            {
+                loginSuccessful = true;
+                loginUser = user;
+            }
+        }
+
+        return loginSuccessful;
+    }
+
+    public static bool CheckUserExists(string username)
+    {
+        bool validInput = false;
+        List<User> users = SystemController.GetAllUsers();
+
+        foreach (User user in users)
+        {
+            if (username == user.Username)
+            {
+                Console.WriteLine("Username already exists, please enter a new one.");
+                validInput = false;
+                break;
+            }
+
+            validInput = true;
+        }
+        return validInput;
+    }
+
     public static void AddTicket(User user, ref Ticket ticket)
     {
         new TicketDB(new SqlConnectionFactory()).AddTicket(user, ref ticket);

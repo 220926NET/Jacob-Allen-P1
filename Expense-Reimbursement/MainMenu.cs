@@ -64,16 +64,7 @@ public static class MainMenu
         password = Console.ReadLine();
         loginUser = new User();
 
-        List<User> users = SystemController.GetAllUsers();
-
-        foreach (User user in users)
-        {
-            if (user.Username == username && user.Password == password)
-            {
-                loginSuccessful = true;
-                loginUser = user;
-            }
-        }
+        loginSuccessful = SystemController.LoginCheck(username, password, ref loginUser);
 
         if (!loginSuccessful)
         {
@@ -100,7 +91,6 @@ public static class MainMenu
 
     static void RegisterUser()
     {
-        List<User> users = SystemController.GetAllUsers();
         bool validInput = false;
 
         Console.WriteLine("Please enter a username that is 4-30 characters long.");
@@ -129,17 +119,9 @@ public static class MainMenu
                 Console.WriteLine("Username is too short. Please enter a username that is 4-30 characters long.");
                 continue;
             }
-
-            foreach (User user in users)
+            else
             {
-                if (username == user.Username)
-                {
-                    Console.WriteLine("Username already exists, please enter a new one.");
-                    validInput = false;
-                    break;
-                }
-
-                validInput = true;
+                validInput = SystemController.CheckUserExists(username);
             }
         }
 
