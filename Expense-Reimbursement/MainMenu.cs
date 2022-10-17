@@ -24,42 +24,30 @@ public static class MainMenu
     {
         string? input = Console.ReadLine();
 
-        if (input == null)
+        switch (input)
         {
+        case null:
             return "Please choose a valid input.";
-        }
-        else if (input == "1")
-        {
+        case "1":
+            Console.Clear();
             Console.WriteLine("Login Screen");
             User loginUser;
             bool loginSuccessful = false;
             loginSuccessful = Login(out loginUser);
 
             if (loginSuccessful) UserMenu(loginUser);
-            else return "Login Failed";
-
+            
             return "";
-        }
-        else if (input == "2")
-        {
+        case "2":
+            Console.Clear();
             Console.WriteLine("Register User");
             RegisterUser();
             return "";
-        }
-        else if (input == "3")
-        {
-            Console.WriteLine("Printing Users info");
-            PrintUsersInfo();
-            return "";
-        }
-        else if (input == "q")
-        {
+        case "q":
             Console.WriteLine("Goodbye!");
             Environment.Exit(0);
             return "";
-        }
-        else
-        {
+        default:
             return "Please choose a valid input.";
         }
     }
@@ -82,8 +70,6 @@ public static class MainMenu
         {
             if (user.Username == username && user.Password == password)
             {
-                Console.WriteLine($"Welcome {user.Username}!");
-                Console.ReadLine();
                 loginSuccessful = true;
                 loginUser = user;
             }
@@ -92,6 +78,7 @@ public static class MainMenu
         if (!loginSuccessful)
         {
             Console.WriteLine("Invalid username or password");
+            Console.WriteLine("Press any key to continue...");
             Console.ReadLine();
         }
 
@@ -109,17 +96,6 @@ public static class MainMenu
         {
             new EmployeeMenu(user);
         }
-    }
-    
-    static void PrintUsersInfo()
-    {
-        List<User> users = SystemController.GetAllUsers();
-
-        foreach (User user in users)
-        {
-            Console.WriteLine(user.ToString());
-        }
-        Console.ReadLine();
     }
 
     static void RegisterUser()

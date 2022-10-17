@@ -33,6 +33,6 @@ public class User
 
     public override string ToString()
     {
-        return $"UserId: {Id} | Username: {Username} | Password: {Password} | isManager: {IsManager.ToString()}";
+        return $"UserId: {Id} | Username: {Username} | isManager: {IsManager.ToString()}";
     }
 }

@@ -13,70 +13,110 @@ public class ManagerMenu
 
     void StartMenu()
     {
-        Console.WriteLine($"Welcome Manager {manager.Username}");
-        Console.WriteLine("Please choose an option below:");
-        Console.WriteLine("[1] Update expense reports");
-        Console.WriteLine("[2] View previous expense reports");
-        Console.WriteLine("[q] Logout");
+        bool exit = false;
 
-        
-        bool isValid = false;
-
-        while(!isValid)
+        while (!exit)
         {
-            string? input = Console.ReadLine();
-            switch (input)
+            Console.Clear();
+            Console.WriteLine($"Welcome Manager {manager.Username}");
+            Console.WriteLine("Please choose an option below:");
+            Console.WriteLine("[1] Update expense reports");
+            Console.WriteLine("[2] View previous expense reports");
+            Console.WriteLine("[3] Print all users");
+            Console.WriteLine("[q] Logout");
+
+
+            bool isValid = false;
+
+            while (!isValid)
             {
-                case null:
-                    Console.WriteLine("Please enter a valid input.");
-                    isValid = false;
-                    break;
-                case "1":
-                    Console.WriteLine("Updating expense report");
-                    Console.WriteLine("Enter Ticket Id:");
-                    int id;
-                    bool validId = int.TryParse(Console.ReadLine(), out id);
-                    if (validId)
-                    {
-                        Ticket ticket = new Ticket();
-                        bool foundTicket = GetTicket(id, ref ticket);
-
-                        if (foundTicket)
+                string? input = Console.ReadLine();
+                switch (input)
+                {
+                    case null:
+                        Console.WriteLine("Please enter a valid input.");
+                        isValid = false;
+                        break;
+                    case "1":
+                        Console.Clear();
+                        Console.WriteLine("Updating expense report");
+                        Console.WriteLine("Enter Ticket Id:");
+                        int id;
+                        bool validId = int.TryParse(Console.ReadLine(), out id);
+                        if (validId)
                         {
-                            Console.WriteLine("Enter new Status for the Ticket");
-                            string? status = Console.ReadLine();
-                            ticket.CurrentStatus = status ?? "Pending";
-                            UpdateTicket(ticket);
-                        }
-                    }
-                    isValid = true;
-                    break;
-                case "2":
-                    Console.WriteLine("View previous reports");
-                    List<Ticket> tickets = new List<Ticket>();
-                    bool success = GetAllTickets(ref tickets);
+                            Ticket ticket = new Ticket();
+                            bool foundTicket = GetTicket(id, ref ticket);
 
-                    if (success)
-                    {
-                        foreach (Ticket ticket in tickets)
-                        {
-                            Console.WriteLine(ticket.ToString());
+                            if (foundTicket)
+                            {
+                                Console.WriteLine("Enter new Status for the Ticket");
+                                string? status = Console.ReadLine();
+                                if (status == "Approved" || status == "Denied")
+                                {
+                                    ticket.CurrentStatus = status ?? "Pending";
+                                    UpdateTicket(ticket);
+                                    Console.WriteLine(ticket.ToString());
+                                    Console.WriteLine("Press any key to continue...");
+                                    Console.ReadLine();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid Status.");
+                                    Console.WriteLine("Press any key to continue...");
+                                    Console.ReadLine();
+                                }
+                            }
                         }
-                    }
-                    else Console.WriteLine("There are no tickets.");
-                    Console.ReadLine();
-                    isValid = true;
-                    break;
-                case "q":
-                    Console.WriteLine("Logging Out");
-                    Console.ReadLine();
-                    isValid = true;
-                    break;
-                default:
-                    Console.WriteLine("Please enter a valid input.");
-                    isValid = false;
-                    break;
+                        isValid = true;
+                        break;
+                    case "2":
+                        Console.Clear();
+                        Console.WriteLine("View previous reports");
+                        List<Ticket> tickets = new List<Ticket>();
+                        bool success = GetAllTickets(ref tickets);
+
+                        if (success)
+                        {
+                            foreach (Ticket ticket in tickets)
+                            {
+                                Console.WriteLine(ticket.ToString());
+                            }
+                        }
+                        else Console.WriteLine("There are no tickets.");
+                        Console.ReadLine();
+                        isValid = true;
+                        break;
+                    case "3":
+                        Console.Clear();
+                        Console.WriteLine("Printing Users info");
+                        PrintUsersInfo();
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadLine();
+                        isValid = true;
+                        break;
+                    case "q":
+                        Console.WriteLine("Logging Out");
+                        Console.ReadLine();
+                        isValid = true;
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Please enter a valid input.");
+                        isValid = false;
+                        break;
+                }
             }
+        }
+    }
+
+    static void PrintUsersInfo()
+    {
+        List<User> users = SystemController.GetAllUsers();
+
+        foreach (User user in users)
+        {
+            Console.WriteLine(user.ToString());
         }
     }
 
