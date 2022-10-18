@@ -25,6 +25,6 @@ public class Ticket
 
     public override string ToString()
     {
-        return $"{Id} {UserId} {Description} {Amount} {DateSubmitted} {CurrentStatus}";
+        return String.Format("|{0,-5}|{1,-10}|{2,-20}|${3,-9:N2}|{4,-15}|{5,-15}|", Id, UserId, Description, Amount, DateSubmitted, CurrentStatus);
     }
 }

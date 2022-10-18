@@ -72,18 +72,20 @@ public class ManagerMenu
                         break;
                     case "2":
                         Console.Clear();
-                        Console.WriteLine("View previous reports");
                         List<Ticket> tickets = new List<Ticket>();
                         bool success = GetAllTickets(ref tickets);
 
                         if (success)
                         {
+                            Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-10}|{4,-15}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
+                            Console.WriteLine(new String('-',82));
                             foreach (Ticket ticket in tickets)
                             {
                                 Console.WriteLine(ticket.ToString());
                             }
                         }
                         else Console.WriteLine("There are no tickets.");
+                        Console.WriteLine("\nPress Enter to continue...");
                         Console.ReadLine();
                         isValid = true;
                         break;
@@ -91,7 +93,7 @@ public class ManagerMenu
                         Console.Clear();
                         Console.WriteLine("Printing Users info");
                         PrintUsersInfo();
-                        Console.WriteLine("Press any key to continue...");
+                        Console.WriteLine("\nPress Enter to continue...");
                         Console.ReadLine();
                         isValid = true;
                         break;
@@ -110,7 +112,7 @@ public class ManagerMenu
         }
     }
 
-    static void PrintUsersInfo()
+    void PrintUsersInfo()
     {
         List<User> users = SystemController.GetAllUsers();
         Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-10}|","ID","Username","IsManager"));
