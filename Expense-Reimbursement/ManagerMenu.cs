@@ -113,6 +113,8 @@ public class ManagerMenu
     static void PrintUsersInfo()
     {
         List<User> users = SystemController.GetAllUsers();
+        Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-10}|","ID","Username","IsManager"));
+        Console.WriteLine(new String('-', 34));
 
         foreach (User user in users)
         {

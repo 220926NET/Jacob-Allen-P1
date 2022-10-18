@@ -4,20 +4,8 @@ public class User
 {
     public int Id { get; set; }
     public bool IsManager { get; set; } = false;
-
-    public string Username
-    {
-        get => _username;
-        set => _username = value;
-    }
-    private string _username = null!;
-
-    public string Password
-    {
-        get => _password;
-        set => _password = value;
-    }
-    private string _password = null!;
+    public string Username { get; set; }
+    public string Password { get; set; }
 
     public User()
     {
@@ -33,6 +21,6 @@ public class User
 
     public override string ToString()
     {
-        return $"UserId: {Id} | Username: {Username} | isManager: {IsManager.ToString()}";
+        return String.Format("|{0,-5}|{1,-15}|{2,-10}|", Id, Username, IsManager.ToString());
     }
 }
