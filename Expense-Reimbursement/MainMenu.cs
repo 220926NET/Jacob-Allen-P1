@@ -28,25 +28,29 @@ public static class MainMenu
         {
         case null:
             return "Please choose a valid input.";
+
         case "1":
             Console.Clear();
             Console.WriteLine("Login Screen");
+
             User loginUser;
-            bool loginSuccessful = false;
-            loginSuccessful = Login(out loginUser);
+            bool loginSuccessful = Login(out loginUser);
 
             if (loginSuccessful) UserMenu(loginUser);
             
             return "";
+
         case "2":
             Console.Clear();
             Console.WriteLine("Register User");
             RegisterUser();
             return "";
+
         case "q":
             Console.WriteLine("Goodbye!");
             Environment.Exit(0);
             return "";
+
         default:
             return "Please choose a valid input.";
         }
@@ -60,8 +64,10 @@ public static class MainMenu
 
         Console.Write("Username: ");
         username = Console.ReadLine();
+
         Console.Write("Password: ");
         password = Console.ReadLine();
+
         loginUser = new User();
 
         loginSuccessful = SystemController.LoginCheck(username, password, ref loginUser);
@@ -69,8 +75,7 @@ public static class MainMenu
         if (!loginSuccessful)
         {
             Console.WriteLine("Invalid username or password");
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadLine();
+            SystemController.PromptContinue();
         }
 
         return loginSuccessful;
@@ -109,14 +114,14 @@ public static class MainMenu
                 Console.WriteLine("Please enter valid input.");
                 continue;
             }
-            else if (username.Length > 30)
+            else if (username.Length > 12)
             {
-                Console.WriteLine("Username is too long. Please enter a username that is 4-30 characters long.");
+                Console.WriteLine("Username is too long. Please enter a username that is 4-12 characters long.");
                 continue;
             }
             else if (username.Length < 4)
             {
-                Console.WriteLine("Username is too short. Please enter a username that is 4-30 characters long.");
+                Console.WriteLine("Username is too short. Please enter a username that is 4-12 characters long.");
                 continue;
             }
             else
@@ -125,7 +130,7 @@ public static class MainMenu
             }
         }
 
-        Console.WriteLine("Please enter a password that is 4-30 characters long.");
+        Console.WriteLine("Please enter a password that is 4-12 characters long.");
 
         validInput = false;
         string? password = "";
@@ -142,14 +147,14 @@ public static class MainMenu
                 Console.WriteLine("Please enter valid input.");
                 continue;
             }
-            else if (password.Length > 30)
+            else if (password.Length > 12)
             {
-                Console.WriteLine("Password is too long. Please enter a username that is 4-30 characters long.");
+                Console.WriteLine("Password is too long. Please enter a username that is 4-12 characters long.");
                 continue;
             }
             else if (password.Length < 4)
             {
-                Console.WriteLine("Password is too short. Please enter a username that is 4-30 characters long.");
+                Console.WriteLine("Password is too short. Please enter a username that is 4-12 characters long.");
                 continue;
             }
 

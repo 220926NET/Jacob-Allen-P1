@@ -18,12 +18,15 @@ public class ManagerMenu
         while (!exit)
         {
             Console.Clear();
-            Console.WriteLine($"Welcome Manager {manager.Username}");
+            Console.WriteLine("-------------------------------------------------");
+            Console.WriteLine($"              Welcome Manager {manager.Username}");
+            Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("Please choose an option below:");
             Console.WriteLine("[1] Update expense reports");
             Console.WriteLine("[2] View previous expense reports");
             Console.WriteLine("[3] Print all users");
             Console.WriteLine("[q] Logout");
+            Console.WriteLine("");
 
 
             bool isValid = false;
@@ -57,14 +60,12 @@ public class ManagerMenu
                                     ticket.CurrentStatus = status ?? "Pending";
                                     UpdateTicket(ticket);
                                     Console.WriteLine(ticket.ToString());
-                                    Console.WriteLine("Press any key to continue...");
-                                    Console.ReadLine();
+                                    SystemController.PromptContinue();
                                 }
                                 else
                                 {
                                     Console.WriteLine("Invalid Status.");
-                                    Console.WriteLine("Press any key to continue...");
-                                    Console.ReadLine();
+                                    SystemController.PromptContinue();
                                 }
                             }
                         }
@@ -77,29 +78,23 @@ public class ManagerMenu
 
                         if (success)
                         {
-                            Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-10}|{4,-15}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
-                            Console.WriteLine(new String('-',82));
+                            tickets[0].PrintHeader();
                             foreach (Ticket ticket in tickets)
                             {
                                 Console.WriteLine(ticket.ToString());
                             }
                         }
                         else Console.WriteLine("There are no tickets.");
-                        Console.WriteLine("\nPress Enter to continue...");
-                        Console.ReadLine();
+                        SystemController.PromptContinue();
                         isValid = true;
                         break;
                     case "3":
                         Console.Clear();
-                        Console.WriteLine("Printing Users info");
                         PrintUsersInfo();
-                        Console.WriteLine("\nPress Enter to continue...");
-                        Console.ReadLine();
+                        SystemController.PromptContinue();
                         isValid = true;
                         break;
                     case "q":
-                        Console.WriteLine("Logging Out");
-                        Console.ReadLine();
                         isValid = true;
                         exit = true;
                         break;
@@ -115,8 +110,7 @@ public class ManagerMenu
     void PrintUsersInfo()
     {
         List<User> users = SystemController.GetAllUsers();
-        Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-10}|","ID","Username","IsManager"));
-        Console.WriteLine(new String('-', 34));
+        users[0].PrintHeader();
 
         foreach (User user in users)
         {

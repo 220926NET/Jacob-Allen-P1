@@ -23,6 +23,12 @@ public class Ticket
         Amount = amount;
     }
 
+    public void PrintHeader()
+    {
+        Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-10}|{4,-15}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
+        Console.WriteLine(new String('-',82));
+    }
+
     public override string ToString()
     {
         return String.Format("|{0,-5}|{1,-10}|{2,-20}|${3,-9:N2}|{4,-15}|{5,-15}|", Id, UserId, Description, Amount, DateSubmitted, CurrentStatus);

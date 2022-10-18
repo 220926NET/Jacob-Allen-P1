@@ -5,6 +5,12 @@ namespace Services;
 
 public static class SystemController
 {
+    public static void PromptContinue()
+    {
+        Console.WriteLine("\nPress Enter to continue...");
+        Console.ReadLine();
+    }
+
     public static void AddUser(User newUser)
     {
         new UserDB(new SqlConnectionFactory()).AddUser(newUser);

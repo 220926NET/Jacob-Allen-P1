@@ -18,11 +18,14 @@ public class EmployeeMenu
         while(!exit)
         {
             Console.Clear();
-            Console.WriteLine($"Welcome Employee {employee.Username}");
+            Console.WriteLine("-------------------------------------------------");
+            Console.WriteLine($"             Welcome Employee {employee.Username}");
+            Console.WriteLine("-------------------------------------------------");
             Console.WriteLine("Please choose an option below:");
             Console.WriteLine("[1] Add new expense report");
             Console.WriteLine("[2] View previous expense reports");
             Console.WriteLine("[q] Logout");
+            Console.WriteLine("");
 
 
             bool isValid = false;
@@ -40,18 +43,18 @@ public class EmployeeMenu
                         Console.Clear();
                         Console.WriteLine("Add new expense report");
                         AddTicket(employee);
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadLine();
+                        SystemController.PromptContinue();
                         isValid = true;
                         break;
                     case "2":
                         Console.Clear();
-                        Console.WriteLine("View previous reports");
+                        
                         List<Ticket> userTickets = new List<Ticket>();
                         bool success = GetUserTickets(employee, ref userTickets);
 
                         if (success)
                         {
+                            userTickets[0].PrintHeader();
                             foreach (Ticket ticket in userTickets)
                             {
                                 Console.WriteLine(ticket.ToString());
@@ -59,14 +62,10 @@ public class EmployeeMenu
                         }
                         else Console.WriteLine("You have no tickets.");
 
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadLine();
+                        SystemController.PromptContinue();
                         isValid = true;
                         break;
                     case "q":
-                        Console.WriteLine("Logging Out");
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadLine();
                         isValid = true;
                         exit = true;
                         break;

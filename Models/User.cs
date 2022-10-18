@@ -19,6 +19,12 @@ public class User
         Password = pass ?? "error";
     }
 
+    public void PrintHeader()
+    {
+        Console.WriteLine(String.Format("|{0,-5}|{1,-15}|{2,-10}|","ID","Username","IsManager"));
+        Console.WriteLine(new String('-', 34));
+    }
+
     public override string ToString()
     {
         return String.Format("|{0,-5}|{1,-15}|{2,-10}|", Id, Username, IsManager.ToString());
