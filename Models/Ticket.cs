@@ -25,12 +25,12 @@ public class Ticket
 
     public void PrintHeader()
     {
-        Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-10}|{4,-15}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
-        Console.WriteLine(new String('-',82));
+        Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-20}|{4,-15}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
+        Console.WriteLine(new String('-',92));
     }
 
     public override string ToString()
     {
-        return String.Format("|{0,-5}|{1,-10}|{2,-20}|${3,-9:N2}|{4,-15}|{5,-15}|", Id, UserId, Description, Amount, DateSubmitted, CurrentStatus);
+        return String.Format("|{0,-5}|{1,-10}|{2,-20}|${3,-19:N2}|{4,-15}|{5,-15}|", Id, UserId, Description, Amount, DateSubmitted, CurrentStatus);
     }
 }
