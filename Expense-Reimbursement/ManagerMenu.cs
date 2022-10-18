@@ -42,33 +42,7 @@ public class ManagerMenu
                         break;
                     case "1":
                         Console.Clear();
-                        Console.WriteLine("Updating expense report");
-                        Console.WriteLine("Enter Ticket Id:");
-                        int id;
-                        bool validId = int.TryParse(Console.ReadLine(), out id);
-                        if (validId)
-                        {
-                            Ticket ticket = new Ticket();
-                            bool foundTicket = GetTicket(id, ref ticket);
-
-                            if (foundTicket)
-                            {
-                                Console.WriteLine("Enter new Status for the Ticket");
-                                string? status = Console.ReadLine();
-                                if (status == "Approved" || status == "Denied")
-                                {
-                                    ticket.CurrentStatus = status ?? "Pending";
-                                    UpdateTicket(ticket);
-                                    Console.WriteLine(ticket.ToString());
-                                    SystemController.PromptContinue();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Invalid Status.");
-                                    SystemController.PromptContinue();
-                                }
-                            }
-                        }
+                        UpdateTickets();
                         isValid = true;
                         break;
                     case "2":
@@ -121,6 +95,77 @@ public class ManagerMenu
     bool GetAllTickets(ref List<Ticket> tickets)
     {
         return SystemController.GetAllTickets(ref tickets);
+    }
+
+    bool GetPendingTickets(ref List<Ticket> tickets)
+    {
+        return SystemController.GetPendingTickets(ref tickets);
+    }
+
+    void UpdateTickets()
+    {
+
+        List<Ticket> pendingTickets = new List<Ticket>();
+        bool success = GetPendingTickets(ref pendingTickets);
+
+        if (success)
+        {
+            pendingTickets[0].PrintHeader();
+
+            foreach(Ticket ticket in pendingTickets)
+            {
+                Console.WriteLine(ticket.ToString());
+            }
+
+            Console.WriteLine("\nEnter Ticket Id:");
+            int id;
+            bool validId = int.TryParse(Console.ReadLine(), out id);
+            if (validId)
+            {
+                Ticket foundTicket = new Ticket();
+                bool found = false;
+
+                foreach(Ticket ticket in pendingTickets)
+                {
+                    if(ticket.Id == id) 
+                    {
+                        foundTicket = ticket;
+                        found = true;
+                    }
+                }
+
+                if (found)
+                {
+                    Console.WriteLine("Enter new status for the ticket: 'Approved' or 'Denied'");
+                    string? status = Console.ReadLine();
+                    if (status == "Approved" || status == "Denied")
+                    {
+                        foundTicket.CurrentStatus = status ?? "Pending";
+                        UpdateTicket(foundTicket);
+
+                        Console.WriteLine("");
+                        foundTicket.PrintHeader();
+                        Console.WriteLine(foundTicket.ToString());
+                        SystemController.PromptContinue();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Status.");
+                        SystemController.PromptContinue();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Ticket Id");
+                    SystemController.PromptContinue();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input");
+                SystemController.PromptContinue();
+            }
+        }
     }
 
     void UpdateTicket(Ticket ticket)

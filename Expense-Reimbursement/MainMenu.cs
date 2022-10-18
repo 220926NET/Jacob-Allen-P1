@@ -98,7 +98,7 @@ public static class MainMenu
     {
         bool validInput = false;
 
-        Console.WriteLine("Please enter a username that is 4-30 characters long.");
+        Console.WriteLine("Please enter a username that is 4-12 characters long.");
 
         string? username = "";
 

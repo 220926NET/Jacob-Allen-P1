@@ -71,6 +71,11 @@ public static class SystemController
     {
         return new TicketDB(new SqlConnectionFactory()).GetAllTickets(ref tickets);
     } 
+
+    public static bool GetPendingTickets(ref List<Ticket> tickets)
+    {
+        return new TicketDB(new SqlConnectionFactory()).GetPendingTickets(ref tickets);
+    }
     public static bool GetUserTickets(User user, ref List<Ticket> userTickets)
     {
         return new TicketDB(new SqlConnectionFactory()).GetUserTickets(user, ref userTickets);

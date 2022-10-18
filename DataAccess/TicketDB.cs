@@ -174,6 +174,47 @@ public class TicketDB
         return false;
     }
 
+    public bool GetPendingTickets(ref List<Ticket> pendingTickets)
+    {
+        try
+        {
+            using SqlConnection connection = _factory.GetConnection();
+            connection.Open();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Tickets WHERE Status = 'Pending'", connection);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if(reader.HasRows)
+            {
+                while(reader.Read())
+                {
+                    Ticket ticket = new Ticket() {
+                        Id = (int) reader["Id"],
+                        UserId = (int) reader["UserId"],
+                        Description = (string) reader["Description"],
+                        Amount = (decimal) reader["Amount"],
+                        DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]),
+                        CurrentStatus = (string) reader["Status"]
+                    };
+
+                    pendingTickets.Add(ticket);
+                }
+            }
+        }
+        catch(SqlException)
+        {
+            Console.WriteLine("Something went wrong connecting to the DB...");
+        }
+
+        if (pendingTickets.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public void UpdateTicket(Ticket ticket)
     {
         try
