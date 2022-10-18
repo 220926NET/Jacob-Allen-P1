@@ -166,6 +166,11 @@ public class ManagerMenu
                 SystemController.PromptContinue();
             }
         }
+        else
+        {
+            Console.WriteLine("There are no Pending tickets");
+            SystemController.PromptContinue();
+        }
     }
 
     void UpdateTicket(Ticket ticket)
