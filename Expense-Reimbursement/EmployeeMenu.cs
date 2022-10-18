@@ -99,6 +99,7 @@ public class EmployeeMenu
         {
             ticket = new Ticket(user.Id, description, amount);
             SystemController.AddTicket(user, ref ticket);
+            ticket.PrintHeader();
             Console.WriteLine(ticket.ToString());
         }
     }

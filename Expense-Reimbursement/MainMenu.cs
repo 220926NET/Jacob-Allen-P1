@@ -164,6 +164,7 @@ public static class MainMenu
         User newUser = new User(username, password);
 
         SystemController.AddUser(newUser);
-
+        Console.WriteLine($"\nUser {newUser.Username} successfully registered!");
+        SystemController.PromptContinue();
     }
 }
