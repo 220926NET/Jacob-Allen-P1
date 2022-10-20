@@ -30,6 +30,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Register")]
     public ActionResult<User> AddUser(User user)
     {
         if (!ModelState.IsValid) return UnprocessableEntity();
@@ -45,13 +46,13 @@ public class UsersController : ControllerBase
         if (!ModelState.IsValid) return UnprocessableEntity();
 
         bool success = SystemController.LoginCheck(ref loginUser);
-        string output;
-        output = Request.Headers["UserId"];
+        // string output;
+        // output = Request.Headers["UserId"];
 
         if (success)
         {
             HttpContext.Response.Headers.Add("UserId", loginUser.Id.ToString());
-            return loginUser.IsManager ? Ok("Welcome Manager") : Ok($"Welcome Employee {output}");
+            return loginUser.IsManager ? Ok("Welcome Manager") : Ok($"Welcome Employee");
         }
 
         return BadRequest();
