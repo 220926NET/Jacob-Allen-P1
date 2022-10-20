@@ -1,10 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 namespace Models;
 
 public class User
 {
     public int Id { get; set; }
     public bool IsManager { get; set; } = false;
+    [Required]
+    [StringLength(12)]
     public string Username { get; set; }
+    [Required]
+    [StringLength(12)]
     public string Password { get; set; }
 
     public User()

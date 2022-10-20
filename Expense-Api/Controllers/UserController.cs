@@ -32,7 +32,28 @@ public class UsersController : ControllerBase
     [HttpPost]
     public ActionResult<User> AddUser(User user)
     {
+        if (!ModelState.IsValid) return UnprocessableEntity();
+
         bool success = SystemController.AddUser(user);
         return success ? Ok(user) : BadRequest("Username already exists");
+    }
+
+    [HttpPost]
+    [Route("login")]
+    public ActionResult<User> LoginUser(User loginUser)
+    {
+        if (!ModelState.IsValid) return UnprocessableEntity();
+
+        bool success = SystemController.LoginCheck(ref loginUser);
+        string output;
+        output = Request.Headers["UserId"];
+
+        if (success)
+        {
+            HttpContext.Response.Headers.Add("UserId", loginUser.Id.ToString());
+            return loginUser.IsManager ? Ok("Welcome Manager") : Ok($"Welcome Employee {output}");
+        }
+
+        return BadRequest();
     }
 }

@@ -68,9 +68,9 @@ public static class MainMenu
         Console.Write("Password: ");
         password = Console.ReadLine();
 
-        loginUser = new User();
+        loginUser = new User(username, password);
 
-        loginSuccessful = SystemController.LoginCheck(username, password, ref loginUser);
+        loginSuccessful = SystemController.LoginCheck(ref loginUser);
 
         if (!loginSuccessful)
         {

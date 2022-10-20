@@ -32,14 +32,14 @@ public static class SystemController
         return new UserDB(new SqlConnectionFactory()).GetAllUsers();
     }
 
-    public static bool LoginCheck(string? username, string? password, ref User loginUser)
+    public static bool LoginCheck(ref User loginUser)
     {
         List<User> users = SystemController.GetAllUsers();
         bool loginSuccessful = false;
 
         foreach (User user in users)
         {
-            if (user.Username == username && user.Password == password)
+            if (user.Username == loginUser.Username && user.Password == loginUser.Password)
             {
                 loginSuccessful = true;
                 loginUser = user;
