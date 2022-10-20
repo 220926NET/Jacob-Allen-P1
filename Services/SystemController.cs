@@ -11,9 +11,15 @@ public static class SystemController
         Console.ReadLine();
     }
 
-    public static void AddUser(User newUser)
+    public static bool AddUser(User newUser)
     {
-        new UserDB(new SqlConnectionFactory()).AddUser(newUser);
+        bool valid = CheckUserExists(newUser.Username);
+        if (valid)
+        {
+            new UserDB(new SqlConnectionFactory()).AddUser(newUser);
+        }
+
+        return valid;
     }
 
     public static bool UserExists(string username)
@@ -52,7 +58,6 @@ public static class SystemController
         {
             if (username == user.Username)
             {
-                Console.WriteLine("Username already exists, please enter a new one.");
                 validInput = false;
                 break;
             }

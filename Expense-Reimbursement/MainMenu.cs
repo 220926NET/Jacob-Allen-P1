@@ -127,6 +127,7 @@ public static class MainMenu
             else
             {
                 validInput = SystemController.CheckUserExists(username);
+                if (!validInput) Console.WriteLine("Username already exists, please enter a new one.");
             }
         }
 

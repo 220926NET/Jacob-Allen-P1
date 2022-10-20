@@ -6,7 +6,7 @@ namespace Expense_Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class UsersController : ControllerBase
 {
 
     [HttpGet]
@@ -18,7 +18,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public ActionResult<List<User>> GetUser(int id)
+    public ActionResult<User> GetUser(int id)
     {
         List<User> users = SystemController.GetAllUsers();
 
@@ -27,5 +27,12 @@ public class UserController : ControllerBase
             if(user.Id == id) return Ok(user);
         }
         return BadRequest("User not found");
+    }
+
+    [HttpPost]
+    public ActionResult<User> AddUser(User user)
+    {
+        bool success = SystemController.AddUser(user);
+        return success ? Ok(user) : BadRequest("Username already exists");
     }
 }
