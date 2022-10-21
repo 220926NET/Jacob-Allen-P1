@@ -81,4 +81,47 @@ public class UserDB
         return users;
 
     }
+
+    public User GetUser(int id)
+    {
+        User user = new User();
+        try 
+        {
+
+            using SqlConnection connection = _factory.GetConnection();
+            connection.Open();
+
+            SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE Id = @id;", connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    int userId = (int) reader["Id"];
+                    string un = (string) reader["UserName"];
+                    string pw = (string) reader["Password"];
+                    bool manager = (bool) reader ["IsManager"];
+
+                    
+                    user.Id = id;
+                    user.Username = un;
+                    user.Password = pw;
+                    user.IsManager = manager;
+                    
+
+                }
+            }
+
+
+        }
+        catch (SqlException)
+        {
+            Console.WriteLine("Something went wrong connecting to the DB...");
+        }
+
+        return user;
+    }
 }

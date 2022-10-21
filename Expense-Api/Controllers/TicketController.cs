@@ -10,7 +10,6 @@ public class TicketsController : ControllerBase
 {
 
     [HttpGet]
-    [Route("View")]
     public ActionResult<Ticket> GetAllTickets()
     {
         List<Ticket> tickets = new List<Ticket>();
@@ -20,10 +19,23 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{UserId}")]
-    public ActionResult<Ticket> GetUserTickets()
+    [Route("{userId}")]
+    public ActionResult<Ticket> GetUserTickets(int userId)
     {
-        return BadRequest();
+        int id = int.Parse(HttpContext.Request.Headers["UserId"]);
+
+        if (id == userId)
+        {
+            User user = SystemController.GetUser(userId);
+            List<Ticket> tickets = new List<Ticket>();
+            SystemController.GetUserTickets(user, ref tickets);
+            return Ok(tickets);
+        }
+        else 
+        {
+            return StatusCode(403, "Forbidden Access");
+        }
+        
     }
 
     [HttpGet]

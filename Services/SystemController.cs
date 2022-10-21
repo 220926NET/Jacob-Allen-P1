@@ -32,6 +32,11 @@ public static class SystemController
         return new UserDB(new SqlConnectionFactory()).GetAllUsers();
     }
 
+    public static User GetUser(int id)
+    {
+        return new UserDB(new SqlConnectionFactory()).GetUser(id);
+    }
+
     public static bool LoginCheck(ref User loginUser)
     {
         List<User> users = SystemController.GetAllUsers();
