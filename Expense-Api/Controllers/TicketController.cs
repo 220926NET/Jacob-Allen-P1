@@ -10,7 +10,7 @@ public class TicketsController : ControllerBase
 {
 
     [HttpGet]
-    public ActionResult<Ticket> GetAllTickets()
+    public ActionResult<List<Ticket>> GetAllTickets()
     {
         List<Ticket> tickets = new List<Ticket>();
         bool success = SystemController.GetAllTickets(ref tickets);
@@ -20,7 +20,7 @@ public class TicketsController : ControllerBase
 
     [HttpGet]
     [Route("{userId}")]
-    public ActionResult<Ticket> GetUserTickets(int userId)
+    public ActionResult<List<Ticket>> GetUserTickets(int userId)
     {
         int id = int.Parse(HttpContext.Request.Headers["UserId"]);
 
@@ -40,9 +40,12 @@ public class TicketsController : ControllerBase
 
     [HttpGet]
     [Route("Pending")]
-    public ActionResult<Ticket> GetPendingTickets()
+    public ActionResult<List<Ticket>> GetPendingTickets()
     {
-        return BadRequest();
+        List<Ticket> tickets = new List<Ticket>();
+        bool success = SystemController.GetPendingTickets(ref tickets);
+
+        return success ? Ok(tickets) : BadRequest();
     }
 
     // TODO Refactor all this
@@ -68,9 +71,17 @@ public class TicketsController : ControllerBase
     }
 
     [HttpPut]
-    [Route("Update")]
-    public ActionResult<Ticket> UpdateTicket(Ticket ticket)
+    [Route("{ticketId}")]
+    public ActionResult<Ticket> UpdateTicket(int ticketId, [FromForm] string status)
     {
-        return BadRequest();
+        User user = SystemController.GetUser(int.Parse(Request.Headers["UserId"]));
+        if (!user.IsManager) return StatusCode(403, "Unauthorized");
+
+        Ticket ticket = new Ticket();
+        SystemController.GetTicket(ticketId, ref ticket);
+
+        ticket.CurrentStatus = status;
+        SystemController.UpdateTicket(ticket);
+        return Ok(ticket);
     }
 }
