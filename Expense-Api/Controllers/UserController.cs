@@ -39,7 +39,7 @@ public class UsersController : ControllerBase
     [Route("Register")]
     public ActionResult<User> AddUser(User user)
     {
-        bool success = SystemController.AddUser(user);
+        bool success = _service.AddUser(user);
         return success ? Ok(user) : BadRequest("Username already exists");
     }
 
