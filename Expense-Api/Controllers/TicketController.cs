@@ -19,6 +19,20 @@ public class TicketsController : ControllerBase
         return success ? Ok(tickets) : BadRequest();
     }
 
+    [HttpGet]
+    [Route("{UserId}")]
+    public ActionResult<Ticket> GetUserTickets()
+    {
+        return BadRequest();
+    }
+
+    [HttpGet]
+    [Route("Pending")]
+    public ActionResult<Ticket> GetPendingTickets()
+    {
+        return BadRequest();
+    }
+
     // TODO Refactor all this
     [HttpPost]
     [Route("Submit")]
@@ -39,5 +53,12 @@ public class TicketsController : ControllerBase
 
         SystemController.AddTicket(currentUser, ref ticket);
         return Ok(ticket);
+    }
+
+    [HttpPut]
+    [Route("Update")]
+    public ActionResult<Ticket> UpdateTicket(Ticket ticket)
+    {
+        return BadRequest();
     }
 }
