@@ -8,7 +8,7 @@ public class Ticket
     public int UserId { get; set; }
     public string Description { get; set; } = "";
     public decimal Amount { get; set; }
-    public DateOnly DateSubmitted { get; set; }
+    public DateTime DateSubmitted { get; set; }
     public string CurrentStatus { get; set; } = Status.Pending.ToString();
 
 
@@ -25,12 +25,12 @@ public class Ticket
 
     public void PrintHeader()
     {
-        Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-20}|{4,-15}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
+        Console.WriteLine(String.Format("|{0,-5}|{1,-10}|{2,-20}|{3,-20}|{4,-25}|{5,-15}|", "Id", "UserId", "Description", "Amount", "DateSubmitted", "CurrentStatus"));
         Console.WriteLine(new String('-',92));
     }
 
     public override string ToString()
     {
-        return String.Format("|{0,-5}|{1,-10}|{2,-20}|${3,-19:N2}|{4,-15}|{5,-15}|", Id, UserId, Description, Amount, DateSubmitted, CurrentStatus);
+        return String.Format("|{0,-5}|{1,-10}|{2,-20}|${3,-19:N2}|{4,-25}|{5,-15}|", Id, UserId, Description, Amount, DateSubmitted, CurrentStatus);
     }
 }

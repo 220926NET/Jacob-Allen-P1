@@ -33,8 +33,6 @@ public class UsersController : ControllerBase
     [Route("Register")]
     public ActionResult<User> AddUser(User user)
     {
-        if (!ModelState.IsValid) return UnprocessableEntity();
-
         bool success = SystemController.AddUser(user);
         return success ? Ok(user) : BadRequest("Username already exists");
     }
@@ -43,7 +41,6 @@ public class UsersController : ControllerBase
     [Route("login")]
     public ActionResult<User> LoginUser(User loginUser)
     {
-        if (!ModelState.IsValid) return UnprocessableEntity();
 
         bool success = SystemController.LoginCheck(ref loginUser);
         // string output;

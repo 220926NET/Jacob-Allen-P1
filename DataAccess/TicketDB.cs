@@ -33,7 +33,7 @@ public class TicketDB
                 ticket.UserId = (int)reader["UserId"];
                 ticket.Description = (string)reader["Description"];
                 ticket.Amount = (decimal)reader["Amount"];
-                ticket.DateSubmitted = DateOnly.FromDateTime((DateTime)reader["DateSubmitted"]);
+                ticket.DateSubmitted = (DateTime)reader["DateSubmitted"];
                 ticket.CurrentStatus = (string)reader["Status"];
 
 
@@ -76,7 +76,7 @@ public class TicketDB
 
                 ticket.Id = (int) reader["Id"];
                 // Console.WriteLine(reader["DateSubmitted"].GetType());
-                ticket.DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]);
+                ticket.DateSubmitted = (DateTime) reader["DateSubmitted"];
             }
             
         }
@@ -110,7 +110,7 @@ public class TicketDB
                         UserId = (int) reader["UserId"],
                         Description = (string) reader["Description"],
                         Amount = (decimal) reader["Amount"],
-                        DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]),
+                        DateSubmitted = (DateTime) reader["DateSubmitted"],
                         CurrentStatus = (string) reader["Status"]
                     };
 
@@ -153,7 +153,7 @@ public class TicketDB
                         UserId = (int) reader["UserId"],
                         Description = (string) reader["Description"],
                         Amount = (decimal) reader["Amount"],
-                        DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]),
+                        DateSubmitted = (DateTime) reader["DateSubmitted"],
                         CurrentStatus = (string) reader["Status"]
                     };
 
@@ -194,7 +194,7 @@ public class TicketDB
                         UserId = (int) reader["UserId"],
                         Description = (string) reader["Description"],
                         Amount = (decimal) reader["Amount"],
-                        DateSubmitted = DateOnly.FromDateTime((DateTime) reader["DateSubmitted"]),
+                        DateSubmitted = (DateTime) reader["DateSubmitted"],
                         CurrentStatus = (string) reader["Status"]
                     };
 
