@@ -5,7 +5,7 @@ namespace DataAccess;
 
 // ADO.NET : Collection of classes and tools to interact with a variety of data sources in uniform fashion
 
-public class UserDB
+public class UserDB : IDbAccess<User>
 {
     private SqlConnectionFactory _factory;
 
@@ -14,8 +14,9 @@ public class UserDB
         _factory = factory;
     }
 
-    public void AddUser(User newUser)
+    public bool Add(User newUser)
     {
+        int rows = 0;
         try
         {
             using SqlConnection connection = _factory.GetConnection();
@@ -27,15 +28,17 @@ public class UserDB
             command.Parameters.AddWithValue("@username", newUser.Username);
             command.Parameters.AddWithValue("@password", newUser.Password);
 
-            command.ExecuteNonQuery();
+            rows = command.ExecuteNonQuery();
         }
         catch (SqlException)
         {
             Console.WriteLine("Something went wrong connecting to the DB...");
         }
+
+        return rows > 0;
     }
 
-    public List<User> GetAllUsers()
+    public List<User> GetAll()
     {
 
         List<User> users = new List<User>();
@@ -82,7 +85,7 @@ public class UserDB
 
     }
 
-    public User GetUser(int id)
+    public User GetById(int id)
     {
         User user = new User();
         try 

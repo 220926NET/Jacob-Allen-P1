@@ -3,7 +3,7 @@ using DataAccess;
 
 namespace Services;
 
-public static class SystemController
+public class SystemController : IService
 {
     public static void PromptContinue()
     {
@@ -16,25 +16,20 @@ public static class SystemController
         bool valid = CheckUserExists(newUser.Username);
         if (valid)
         {
-            new UserDB(new SqlConnectionFactory()).AddUser(newUser);
+            new UserDB(new SqlConnectionFactory()).Add(newUser);
         }
 
         return valid;
     }
 
-    public static bool UserExists(string username)
-    {
-        return new StaticStorage().UserExists(username);
-    }
-
     public static List<User> GetAllUsers()
     {
-        return new UserDB(new SqlConnectionFactory()).GetAllUsers();
+        return new UserDB(new SqlConnectionFactory()).GetAll();
     }
 
     public static User GetUser(int id)
     {
-        return new UserDB(new SqlConnectionFactory()).GetUser(id);
+        return new UserDB(new SqlConnectionFactory()).GetById(id);
     }
 
     public static bool LoginCheck(ref User loginUser)
