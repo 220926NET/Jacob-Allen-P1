@@ -5,18 +5,24 @@ namespace Services;
 
 public class SystemController : IService
 {
+    private readonly IDbAccess<User> _repo;
+
+    SystemController (IDbAccess<User> repository)
+    {
+        _repo = repository;
+    }
     public static void PromptContinue()
     {
         Console.WriteLine("\nPress Enter to continue...");
         Console.ReadLine();
     }
 
-    public static bool AddUser(User newUser)
+    public bool AddUser(User newUser)
     {
         bool valid = CheckUserExists(newUser.Username);
         if (valid)
         {
-            new UserDB(new SqlConnectionFactory()).Add(newUser);
+            _repo.Add(newUser);
         }
 
         return valid;
