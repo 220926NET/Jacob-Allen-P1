@@ -10,10 +10,11 @@ public class UsersController : ControllerBase
 {
     private IService _service;
 
-    UsersController(IService service)
+    public UsersController(IService service)
     {
         _service = service;
     }
+
 
     [HttpGet]
     public ActionResult<List<User>> GetAllUsers()

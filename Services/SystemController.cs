@@ -7,9 +7,9 @@ public class SystemController : IService
 {
     private readonly IDbAccess<User> _repo;
 
-    SystemController (IDbAccess<User> repository)
+    public SystemController(IDataAccessFactory dataAccessFactory)
     {
-        _repo = repository;
+        _repo = dataAccessFactory.GetUserDB();
     }
     public static void PromptContinue()
     {
