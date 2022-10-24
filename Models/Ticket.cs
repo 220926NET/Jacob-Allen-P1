@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Models;
 
 public class Ticket
@@ -6,8 +8,10 @@ public class Ticket
 
     public int Id { get; set; }
     public int UserId { get; set; }
+    [Required]
     public string? Description { get; set; }
-    public decimal Amount { get; set; }
+    [Required]
+    public decimal? Amount { get; set; }
     public DateTime DateSubmitted { get; set; }
     public string CurrentStatus { get; set; } = Status.Pending.ToString();
 

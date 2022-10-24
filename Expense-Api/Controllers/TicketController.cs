@@ -65,6 +65,7 @@ public class TicketsController : ControllerBase
     {
         int id = int.Parse(Request.Headers["UserId"]);
         ticket.UserId = id;
+        ticket.CurrentStatus = "Pending";
 
         _ticketService.Add(ref ticket);
         return Ok(ticket);

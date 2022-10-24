@@ -17,12 +17,12 @@ public class SystemController
         Console.ReadLine();
     }
 
-    public bool AddUser(User newUser)
+    public static bool AddUser(User newUser)
     {
         bool valid = CheckUserExists(newUser.Username);
         if (valid)
         {
-            _repo.Add(ref newUser);
+            new UserDB(new SqlConnectionFactory()).Add(ref newUser);
         }
 
         return valid;
