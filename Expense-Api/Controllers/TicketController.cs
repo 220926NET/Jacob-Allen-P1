@@ -8,14 +8,21 @@ namespace Expense_Api.Controllers;
 [Route("api/[controller]")]
 public class TicketsController : ControllerBase
 {
+    private readonly ITicketServices _ticketService;
+    private readonly IUserServices _userService;
+
+    public TicketsController(ITicketServices ticketService, IUserServices userService)
+    {
+        _ticketService = ticketService;
+        _userService = userService;
+    }
 
     [HttpGet]
     public ActionResult<List<Ticket>> GetAllTickets()
     {
-        List<Ticket> tickets = new List<Ticket>();
-        bool success = SystemController.GetAllTickets(ref tickets);
+        List<Ticket> tickets = _ticketService.GetAll();
 
-        return success ? Ok(tickets) : BadRequest();
+        return Ok(tickets);
     }
 
     [HttpGet]
@@ -26,9 +33,9 @@ public class TicketsController : ControllerBase
 
         if (id == userId)
         {
-            User user = SystemController.GetUser(userId);
+            User user = _userService.GetById(userId);
             List<Ticket> tickets = new List<Ticket>();
-            SystemController.GetUserTickets(user, ref tickets);
+            _ticketService.GetUserTickets(user, ref tickets);
             return Ok(tickets);
         }
         else 
@@ -43,7 +50,7 @@ public class TicketsController : ControllerBase
     public ActionResult<List<Ticket>> GetPendingTickets()
     {
         List<Ticket> tickets = new List<Ticket>();
-        bool success = SystemController.GetPendingTickets(ref tickets);
+        bool success = _ticketService.GetPendingTickets(ref tickets);
 
         return success ? Ok(tickets) : BadRequest();
     }
@@ -53,20 +60,10 @@ public class TicketsController : ControllerBase
     [Route("Submit")]
     public ActionResult<Ticket> AddTicket(Ticket ticket)
     {
-        string idString = Request.Headers["UserId"];
-        List<User> users = SystemController.GetAllUsers();
-        int id = int.Parse(idString);
-        User currentUser = new User();
-        foreach(User user in users)
-        {
-            if (id == user.Id)
-            {
-                currentUser = user;
-                break;
-            }
-        }
+        int id = int.Parse(Request.Headers["UserId"]);
+        ticket.UserId = id;
 
-        SystemController.AddTicket(currentUser, ref ticket);
+        _ticketService.Add(ref ticket);
         return Ok(ticket);
     }
 
@@ -74,14 +71,13 @@ public class TicketsController : ControllerBase
     [Route("{ticketId}")]
     public ActionResult<Ticket> UpdateTicket(int ticketId, [FromForm] string status)
     {
-        User user = SystemController.GetUser(int.Parse(Request.Headers["UserId"]));
+        User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
         if (!user.IsManager) return StatusCode(403, "Unauthorized");
 
-        Ticket ticket = new Ticket();
-        SystemController.GetTicket(ticketId, ref ticket);
+        Ticket ticket =  _ticketService.GetById(ticketId);
 
         ticket.CurrentStatus = status;
-        SystemController.UpdateTicket(ticket);
+        _ticketService.UpdateTicket(ticket);
         return Ok(ticket);
     }
 }

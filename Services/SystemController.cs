@@ -3,7 +3,7 @@ using DataAccess;
 
 namespace Services;
 
-public class SystemController : IService
+public class SystemController
 {
     private readonly IDbAccess<User> _repo;
 
@@ -22,7 +22,7 @@ public class SystemController : IService
         bool valid = CheckUserExists(newUser.Username);
         if (valid)
         {
-            _repo.Add(newUser);
+            _repo.Add(ref newUser);
         }
 
         return valid;
@@ -55,7 +55,7 @@ public class SystemController : IService
         return loginSuccessful;
     }
 
-    public static bool CheckUserExists(string username)
+    public static bool CheckUserExists(string? username)
     {
         bool validInput = false;
         List<User> users = SystemController.GetAllUsers();
@@ -75,12 +75,12 @@ public class SystemController : IService
 
     public static void AddTicket(User user, ref Ticket ticket)
     {
-        new TicketDB(new SqlConnectionFactory()).AddTicket(user, ref ticket);
+        new TicketDB(new SqlConnectionFactory()).Add(ref ticket);
     }
 
     public static bool GetAllTickets(ref List<Ticket> tickets)
     {
-        return new TicketDB(new SqlConnectionFactory()).GetAllTickets(ref tickets);
+        return false;
     } 
 
     public static bool GetPendingTickets(ref List<Ticket> tickets)
@@ -99,7 +99,7 @@ public class SystemController : IService
 
     public static bool GetTicket(int id, ref Ticket ticket)
     {
-        return new TicketDB(new SqlConnectionFactory()).GetTicket(id, ref ticket);
+        return false; //new TicketDB(new SqlConnectionFactory()).GetById(id);
     }
 
 }

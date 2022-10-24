@@ -8,9 +8,9 @@ namespace Expense_Api.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private IService _service;
+    private readonly IUserServices _service;
 
-    public UsersController(IService service)
+    public UsersController(IUserServices service)
     {
         _service = service;
     }
@@ -19,7 +19,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public ActionResult<List<User>> GetAllUsers()
     {
-        List<User> users = SystemController.GetAllUsers();
+        List<User> users = _service.GetAll();
         return Ok(users);
     }
 
@@ -27,12 +27,10 @@ public class UsersController : ControllerBase
     [Route("{id}")]
     public ActionResult<User> GetUser(int id)
     {
-        List<User> users = SystemController.GetAllUsers();
+        User user = _service.GetById(id);
 
-        foreach(User user in users)
-        {
-            if(user.Id == id) return Ok(user);
-        }
+        if(user.Id == id) return Ok(user);
+
         return BadRequest("User not found");
     }
 
@@ -40,7 +38,7 @@ public class UsersController : ControllerBase
     [Route("Register")]
     public ActionResult<User> AddUser(User user)
     {
-        bool success = _service.AddUser(user);
+        bool success = _service.Add(ref user);
         return success ? Ok(user) : BadRequest("Username already exists");
     }
 
@@ -49,7 +47,7 @@ public class UsersController : ControllerBase
     public ActionResult<User> LoginUser(User loginUser)
     {
 
-        bool success = SystemController.LoginCheck(ref loginUser);
+        bool success = _service.LoginCheck(ref loginUser);
         // string output;
         // output = Request.Headers["UserId"];
 

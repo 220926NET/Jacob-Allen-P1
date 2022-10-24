@@ -2,7 +2,7 @@ using Microsoft.Data.SqlClient;
 
 namespace DataAccess;
 
-public class SqlConnectionFactory
+public class SqlConnectionFactory : ISqlConnectionFactory
 {
     private const string _connectionString = Secrets.connectionString;
 

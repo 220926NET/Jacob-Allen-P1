@@ -7,15 +7,13 @@ public class User
     public bool IsManager { get; set; } = false;
     [Required]
     [StringLength(12)]
-    public string Username { get; set; }
+    public string? Username { get; set; }
     [Required]
     [StringLength(12)]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     public User()
     {
-        Username = "a";
-        Password = "z";
     }
 
     public User(string? name, string? pass)

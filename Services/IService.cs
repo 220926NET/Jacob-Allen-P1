@@ -1,8 +1,8 @@
-using Models;
-
 namespace Services;
 
-public interface IService
+public interface IService<T>
 {
-    bool AddUser(User user);
+    List<T> GetAll();
+    T GetById(int id);
+    bool Add(ref T t);
 }

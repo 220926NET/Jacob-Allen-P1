@@ -14,29 +14,6 @@ public class UserDB : IDbAccess<User>
         _factory = factory;
     }
 
-    public bool Add(User newUser)
-    {
-        int rows = 0;
-        try
-        {
-            using SqlConnection connection = _factory.GetConnection();
-            connection.Open();
-
-            //SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES ({newUser.Username}, {newUser.Password})", connection);
-
-            using SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES (@username, @password)", connection);
-            command.Parameters.AddWithValue("@username", newUser.Username);
-            command.Parameters.AddWithValue("@password", newUser.Password);
-
-            rows = command.ExecuteNonQuery();
-        }
-        catch (SqlException)
-        {
-            Console.WriteLine("Something went wrong connecting to the DB...");
-        }
-
-        return rows > 0;
-    }
 
     public List<User> GetAll()
     {
@@ -126,5 +103,49 @@ public class UserDB : IDbAccess<User>
         }
 
         return user;
+    }
+    public bool Add(ref User newUser)
+    {
+ 
+        try
+        {
+            using SqlConnection connection = _factory.GetConnection();
+            connection.Open();
+
+            //SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES ({newUser.Username}, {newUser.Password})", connection);
+
+            using SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES (@username, @password)", connection);
+            command.Parameters.AddWithValue("@username", newUser.Username);
+            command.Parameters.AddWithValue("@password", newUser.Password);
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    int userId = (int) reader["Id"];
+                    string un = (string) reader["UserName"];
+                    string pw = (string) reader["Password"];
+                    bool manager = (bool) reader ["IsManager"];
+
+                    
+                    newUser.Id = userId;
+                    newUser.Username = un;
+                    newUser.Password = pw;
+                    newUser.IsManager = manager;
+                    
+
+                }
+
+                return true;
+            }
+        }
+        catch (SqlException)
+        {
+            Console.WriteLine("Something went wrong connecting to the DB...");
+        }
+
+        return false;
     }
 }
