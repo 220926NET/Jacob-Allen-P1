@@ -5,7 +5,7 @@ namespace DataAccess;
 
 // ADO.NET : Collection of classes and tools to interact with a variety of data sources in uniform fashion
 
-public class TicketDB : IDbAccess<Ticket>
+public class TicketDB : ITicketDB
 {
     private SqlConnectionFactory _factory;
 

@@ -12,7 +12,7 @@ public class DataAccessFactory : IDataAccessFactory
         return new UserDB(_connection);
     }
 
-    public IDbAccess<Ticket> GetTicketDB()
+    public ITicketDB GetTicketDB()
     {
         return new TicketDB(_connection);
     }

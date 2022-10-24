@@ -26,7 +26,7 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{userId}")]
+    [Route("user/{userId}")]
     public ActionResult<List<Ticket>> GetUserTickets(int userId)
     {
         int id = int.Parse(HttpContext.Request.Headers["UserId"]);
@@ -40,7 +40,7 @@ public class TicketsController : ControllerBase
         }
         else 
         {
-            return StatusCode(403, "Forbidden Access");
+            return Unauthorized("Unauthorized");
         }
         
     }
@@ -49,10 +49,13 @@ public class TicketsController : ControllerBase
     [Route("Pending")]
     public ActionResult<List<Ticket>> GetPendingTickets()
     {
+        User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
+        if (!user.IsManager) return Unauthorized("Unauthorized");
+
         List<Ticket> tickets = new List<Ticket>();
         bool success = _ticketService.GetPendingTickets(ref tickets);
 
-        return success ? Ok(tickets) : BadRequest();
+        return success ? Ok(tickets) : BadRequest("There are no Pending Tickets");
     }
 
     // TODO Refactor all this
@@ -72,9 +75,12 @@ public class TicketsController : ControllerBase
     public ActionResult<Ticket> UpdateTicket(int ticketId, [FromForm] string status)
     {
         User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
-        if (!user.IsManager) return StatusCode(403, "Unauthorized");
+
+        if (!user.IsManager) return Unauthorized("Unauthorized");
 
         Ticket ticket =  _ticketService.GetById(ticketId);
+
+        if(ticket.CurrentStatus != "Pending") return BadRequest("Ticket has already been processed");
 
         ticket.CurrentStatus = status;
         _ticketService.UpdateTicket(ticket);
