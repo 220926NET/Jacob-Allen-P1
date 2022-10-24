@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace Models;
 
 public class User
@@ -6,16 +7,14 @@ public class User
     public int Id { get; set; }
     public bool IsManager { get; set; } = false;
     [Required]
-    [StringLength(12)]
-    public string Username { get; set; }
+    [StringLength(14, ErrorMessage = "Username is longer than 14 characters")]
+    public string? Username { get; set; }
     [Required]
-    [StringLength(12)]
-    public string Password { get; set; }
+    [StringLength(14, ErrorMessage = "Password is longer than 14 characters")]
+    public string? Password { get; set; }
 
     public User()
     {
-        Username = "a";
-        Password = "z";
     }
 
     public User(string? name, string? pass)

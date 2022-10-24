@@ -8,32 +8,43 @@ namespace Expense_Api.Controllers;
 [Route("api/[controller]")]
 public class TicketsController : ControllerBase
 {
+    private readonly ITicketServices _ticketService;
+    private readonly IUserServices _userService;
+
+    public TicketsController(ITicketServices ticketService, IUserServices userService)
+    {
+        _ticketService = ticketService;
+        _userService = userService;
+    }
 
     [HttpGet]
     public ActionResult<List<Ticket>> GetAllTickets()
     {
-        List<Ticket> tickets = new List<Ticket>();
-        bool success = SystemController.GetAllTickets(ref tickets);
+        User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
 
-        return success ? Ok(tickets) : BadRequest();
+        if (!user.IsManager) return Unauthorized("Unauthorized");
+        
+        List<Ticket> tickets = _ticketService.GetAll();
+
+        return Ok(tickets);
     }
 
     [HttpGet]
-    [Route("{userId}")]
+    [Route("user/{userId}")]
     public ActionResult<List<Ticket>> GetUserTickets(int userId)
     {
         int id = int.Parse(HttpContext.Request.Headers["UserId"]);
 
         if (id == userId)
         {
-            User user = SystemController.GetUser(userId);
+            User user = _userService.GetById(userId);
             List<Ticket> tickets = new List<Ticket>();
-            SystemController.GetUserTickets(user, ref tickets);
+            _ticketService.GetUserTickets(user, ref tickets);
             return Ok(tickets);
         }
         else 
         {
-            return StatusCode(403, "Forbidden Access");
+            return Unauthorized("Unauthorized");
         }
         
     }
@@ -42,10 +53,13 @@ public class TicketsController : ControllerBase
     [Route("Pending")]
     public ActionResult<List<Ticket>> GetPendingTickets()
     {
-        List<Ticket> tickets = new List<Ticket>();
-        bool success = SystemController.GetPendingTickets(ref tickets);
+        User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
+        if (!user.IsManager) return Unauthorized("Unauthorized");
 
-        return success ? Ok(tickets) : BadRequest();
+        List<Ticket> tickets = new List<Ticket>();
+        bool success = _ticketService.GetPendingTickets(ref tickets);
+
+        return success ? Ok(tickets) : BadRequest("There are no Pending Tickets");
     }
 
     // TODO Refactor all this
@@ -53,20 +67,11 @@ public class TicketsController : ControllerBase
     [Route("Submit")]
     public ActionResult<Ticket> AddTicket(Ticket ticket)
     {
-        string idString = Request.Headers["UserId"];
-        List<User> users = SystemController.GetAllUsers();
-        int id = int.Parse(idString);
-        User currentUser = new User();
-        foreach(User user in users)
-        {
-            if (id == user.Id)
-            {
-                currentUser = user;
-                break;
-            }
-        }
+        int id = int.Parse(Request.Headers["UserId"]);
+        ticket.UserId = id;
+        ticket.CurrentStatus = "Pending";
 
-        SystemController.AddTicket(currentUser, ref ticket);
+        _ticketService.Add(ref ticket);
         return Ok(ticket);
     }
 
@@ -74,14 +79,16 @@ public class TicketsController : ControllerBase
     [Route("{ticketId}")]
     public ActionResult<Ticket> UpdateTicket(int ticketId, [FromForm] string status)
     {
-        User user = SystemController.GetUser(int.Parse(Request.Headers["UserId"]));
-        if (!user.IsManager) return StatusCode(403, "Unauthorized");
+        User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
 
-        Ticket ticket = new Ticket();
-        SystemController.GetTicket(ticketId, ref ticket);
+        if (!user.IsManager) return Unauthorized("Unauthorized");
+
+        Ticket ticket =  _ticketService.GetById(ticketId);
+
+        if(ticket.CurrentStatus != "Pending") return BadRequest("Ticket has already been processed");
 
         ticket.CurrentStatus = status;
-        SystemController.UpdateTicket(ticket);
+        _ticketService.UpdateTicket(ticket);
         return Ok(ticket);
     }
 }

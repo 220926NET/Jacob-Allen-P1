@@ -3,8 +3,14 @@ using DataAccess;
 
 namespace Services;
 
-public static class SystemController
+public class SystemController
 {
+    private readonly IDbAccess<User> _repo;
+
+    public SystemController(IDataAccessFactory dataAccessFactory)
+    {
+        _repo = dataAccessFactory.GetUserDB();
+    }
     public static void PromptContinue()
     {
         Console.WriteLine("\nPress Enter to continue...");
@@ -16,25 +22,20 @@ public static class SystemController
         bool valid = CheckUserExists(newUser.Username);
         if (valid)
         {
-            new UserDB(new SqlConnectionFactory()).AddUser(newUser);
+            new UserDB(new SqlConnectionFactory()).Add(ref newUser);
         }
 
         return valid;
     }
 
-    public static bool UserExists(string username)
-    {
-        return new StaticStorage().UserExists(username);
-    }
-
     public static List<User> GetAllUsers()
     {
-        return new UserDB(new SqlConnectionFactory()).GetAllUsers();
+        return new UserDB(new SqlConnectionFactory()).GetAll();
     }
 
     public static User GetUser(int id)
     {
-        return new UserDB(new SqlConnectionFactory()).GetUser(id);
+        return new UserDB(new SqlConnectionFactory()).GetById(id);
     }
 
     public static bool LoginCheck(ref User loginUser)
@@ -54,7 +55,7 @@ public static class SystemController
         return loginSuccessful;
     }
 
-    public static bool CheckUserExists(string username)
+    public static bool CheckUserExists(string? username)
     {
         bool validInput = false;
         List<User> users = SystemController.GetAllUsers();
@@ -74,12 +75,12 @@ public static class SystemController
 
     public static void AddTicket(User user, ref Ticket ticket)
     {
-        new TicketDB(new SqlConnectionFactory()).AddTicket(user, ref ticket);
+        new TicketDB(new SqlConnectionFactory()).Add(ref ticket);
     }
 
     public static bool GetAllTickets(ref List<Ticket> tickets)
     {
-        return new TicketDB(new SqlConnectionFactory()).GetAllTickets(ref tickets);
+        return false;
     } 
 
     public static bool GetPendingTickets(ref List<Ticket> tickets)
@@ -98,7 +99,7 @@ public static class SystemController
 
     public static bool GetTicket(int id, ref Ticket ticket)
     {
-        return new TicketDB(new SqlConnectionFactory()).GetTicket(id, ref ticket);
+        return false; //new TicketDB(new SqlConnectionFactory()).GetById(id);
     }
 
 }
