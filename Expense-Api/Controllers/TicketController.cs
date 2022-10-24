@@ -20,6 +20,10 @@ public class TicketsController : ControllerBase
     [HttpGet]
     public ActionResult<List<Ticket>> GetAllTickets()
     {
+        User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
+
+        if (!user.IsManager) return Unauthorized("Unauthorized");
+        
         List<Ticket> tickets = _ticketService.GetAll();
 
         return Ok(tickets);
