@@ -72,7 +72,7 @@ public class TicketsController : ControllerBase
         ticket.CurrentStatus = "Pending";
 
         _ticketService.Add(ref ticket);
-        return Ok(ticket);
+        return Created("Ticket Created", ticket);
     }
 
     [HttpPut]

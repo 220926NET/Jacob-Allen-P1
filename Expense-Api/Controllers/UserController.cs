@@ -39,7 +39,7 @@ public class UsersController : ControllerBase
     public ActionResult<User> AddUser(User user)
     {
         bool success = _service.Add(ref user);
-        return success ? Ok(user) : BadRequest("Username already exists");
+        return success ? Created("User Registered", user) : BadRequest("Username already exists");
     }
 
     [HttpPost]
