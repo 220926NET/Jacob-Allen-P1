@@ -36,6 +36,7 @@ This is a simple application for users to submit and view expense reimbursment t
 - `GET api/Users/{id}` - Returns User with specified "id"
 - `POST api/Users/Register` - Adds new User with unique username
 - `POST api/Users/login` - Logins User
+
 - `GET api/Tickets/user/{userId}` - Returns all Tickets for User with "userId" (Employee)
 - `POST api/Tickets/user/Submit` - Add a new Ticket (Employee)
 - `GET api/Tickets` - Returns all Tickets (Manager)
