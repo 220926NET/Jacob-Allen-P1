@@ -32,8 +32,6 @@ This is a simple application for users to submit and view expense reimbursment t
 
 ## API
 ### Http Requests
-- `GET api/Users` - Returns all Users
-- `GET api/Users/{id}` - Returns User with specified "id"
 - `POST api/Users/Register` - Adds new User with unique username
 - `POST api/Users/login` - Logins User
 
