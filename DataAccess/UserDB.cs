@@ -114,11 +114,16 @@ public class UserDB : IDbAccess<User>
 
             //SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES ({newUser.Username}, {newUser.Password})", connection);
 
-            using SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) VALUES (@username, @password)", connection);
+            using SqlCommand command = new SqlCommand($"INSERT INTO Users (UserName, Password) OUTPUT INSERTED.Id VALUES (@username, @password)", connection);
             command.Parameters.AddWithValue("@username", newUser.Username);
             command.Parameters.AddWithValue("@password", newUser.Password);
 
-            SqlDataReader reader = command.ExecuteReader();
+            int id = (int) command.ExecuteScalar();
+
+            using SqlCommand selectCommand = new SqlCommand("SELECT * FROM Users WHERE Id=@id", connection);
+            selectCommand.Parameters.AddWithValue("@id", id);
+
+            SqlDataReader reader = selectCommand.ExecuteReader();
 
             if (reader.HasRows)
             {
