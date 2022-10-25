@@ -50,7 +50,7 @@ public class TicketsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Pending")]
+    [Route("user/Pending")]
     public ActionResult<List<Ticket>> GetPendingTickets()
     {
         User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
@@ -64,7 +64,7 @@ public class TicketsController : ControllerBase
 
     // TODO Refactor all this
     [HttpPost]
-    [Route("Submit")]
+    [Route("user/Submit")]
     public ActionResult<Ticket> AddTicket(Ticket ticket)
     {
         int id = int.Parse(Request.Headers["UserId"]);
@@ -76,7 +76,7 @@ public class TicketsController : ControllerBase
     }
 
     [HttpPut]
-    [Route("{ticketId}")]
+    [Route("user/{ticketId}")]
     public ActionResult<Ticket> UpdateTicket(int ticketId, [FromForm] string status)
     {
         User user = _userService.GetById(int.Parse(Request.Headers["UserId"]));
