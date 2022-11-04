@@ -4,7 +4,7 @@ namespace DataAccess;
 
 public class SqlConnectionFactory : ISqlConnectionFactory
 {
-    private const string _connectionString = Secrets.connectionString;
+    private readonly string _connectionString = "";
 
     public SqlConnection GetConnection()
     {
